@@ -1,11 +1,10 @@
-using EmployeeManagementAPI.DTOs;
 using EmployeeManagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeManagementAPI.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _employeeService;
@@ -15,21 +14,22 @@ namespace EmployeeManagementAPI.Controllers
             _employeeService = employeeService;
         }
 
+        // GET /api/employees
         [HttpGet]
-        public ActionResult<List<EmployeeDto>> GetAll()
+        public IActionResult GetAll()
         {
             var employees = _employeeService.GetAll();
             return Ok(employees);
         }
 
+        // GET /api/employees/{id}
         [HttpGet("{id}")]
-        public ActionResult<EmployeeDto> GetById(int id)
+        public IActionResult GetById(int id)
         {
             var employee = _employeeService.GetById(id);
+
             if (employee == null)
-            {
-                return NotFound();
-            }
+                return NotFound(new { message = $"Employee with id {id} not found" });
 
             return Ok(employee);
         }
