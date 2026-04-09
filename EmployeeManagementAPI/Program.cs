@@ -1,4 +1,6 @@
 
+using EmployeeManagementAPI.Services;
+
 namespace EmployeeManagementAPI
 {
     public class Program
@@ -8,6 +10,7 @@ namespace EmployeeManagementAPI
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
