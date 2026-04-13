@@ -5,7 +5,7 @@ namespace EmployeeManagementAPI.Services
 {
     public class EmployeeService : IEmployeeService
     {
-        private readonly List<Employee> _employees = new()
+        private static List<Employee> _employees = new()
         {
             new Employee
             {
@@ -28,32 +28,56 @@ namespace EmployeeManagementAPI.Services
                 JoinedDate = DateTime.Now
             }
         };
-
-        public List<EmployeeDto> GetAll()
+        private int _nextId = 3;
+        private static EmployeeDto MapToDto(Employee e) => new()
         {
-            return _employees.Select(e => new EmployeeDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Email = e.Email,
-                Department = e.Department,
-                Designation = e.Designation
-            }).ToList();
-        }
+            Id = e.Id,
+            Name= e.Name,
+            Email = e.Email,
+            Department = e.Department,
+            Designation= e.Designation,
+
+        };
+        public List<EmployeeDto> GetAll() => _employees.Select(MapToDto).ToList();
 
         public EmployeeDto? GetById(int id)
         {
-            var employee = _employees.FirstOrDefault(e => e.Id == id);
-            if (employee == null) return null;
-
-            return new EmployeeDto
+            var e = _employees.FirstOrDefault(e => e.Id == id);
+           return e == null ? null : MapToDto(e);
+        }
+        public EmployeeDto Add(CreateEmployeeDto dto)
+        {
+            var e = new Employee
             {
-                Id = employee.Id,
-                Name = employee.Name,
-                Email = employee.Email,
-                Department = employee.Department,
-                Designation = employee.Designation
+                Id = _nextId++,
+                Name = dto.Name,
+                Email = dto.Email,
+                Department = dto.Department,
+                Designation = dto.Designation,
+                Salary= dto.Salary,
+                JoinedDate = DateTime.Now
             };
+            _employees.Add(e);
+            return MapToDto(e);
+        }
+        public EmployeeDto? Update(int id,CreateEmployeeDto dto)
+        {
+            var e = _employees.FirstOrDefault(e => e.Id == id);
+            if (e == null) return null;
+            e.Name = dto.Name;
+            e.Email = dto.Email;
+            e.Department = dto.Department;
+            e.Designation = dto.Designation;
+            e.Salary = dto.Salary;
+            return MapToDto(e);
+
+        }
+        public bool Delete(int id)
+        {
+            var e = _employees.FirstOrDefault(e => e.Id == id);
+            if (e == null) return false;
+            _employees.Remove(e);
+            return true;
         }
     }
 }
