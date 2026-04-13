@@ -28,7 +28,6 @@ namespace EmployeeManagementAPI
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();
