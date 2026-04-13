@@ -1,4 +1,3 @@
-using EmployeeManagementAPI.DTOs;
 using EmployeeManagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,6 +21,7 @@ namespace EmployeeManagementAPI.Controllers
             return Ok(_employeeService.GetAll());
         }
 
+        // GET /api/employees/{id}
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
