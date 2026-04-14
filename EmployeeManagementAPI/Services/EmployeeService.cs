@@ -43,7 +43,10 @@ namespace EmployeeManagementAPI.Services
         public EmployeeDto? GetById(int id)
         {
             var e = _employees.FirstOrDefault(e => e.Id == id);
-           return e == null ? null : MapToDto(e);
+            return e == null ? null : MapToDto(e);
+          //  return MapToDto(e);
+
+
         }
         public EmployeeDto Add(CreateEmployeeDto dto)
         {
