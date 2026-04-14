@@ -1,6 +1,8 @@
 
 using EmployeeManagementAPI.Services;
 using EmployeeManagementAPI.Middleware;
+using Scalar.AspNetCore;
+
 namespace EmployeeManagementAPI
 {
     public class Program
@@ -23,6 +25,7 @@ namespace EmployeeManagementAPI
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
+                app.MapScalarApiReference();
             }
             app.UseMiddleware<ExceptionMiddleware>();
             app.UseMiddleware<RequestLoggingMiddleware>();
