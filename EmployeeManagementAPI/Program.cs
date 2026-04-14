@@ -1,6 +1,6 @@
 
 using EmployeeManagementAPI.Services;
-
+using EmployeeManagementAPI.Middleware;
 namespace EmployeeManagementAPI
 {
     public class Program
@@ -13,6 +13,7 @@ namespace EmployeeManagementAPI
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
             builder.Services.AddControllers();
+            builder.Services.AddScoped<IEmployeeService,EmployeeService>();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             // test change
@@ -23,6 +24,8 @@ namespace EmployeeManagementAPI
             {
                 app.MapOpenApi();
             }
+            app.UseMiddleware<ExceptionMiddleware>();
+            app.UseMiddleware<RequestLoggingMiddleware>();
 
             app.UseHttpsRedirection();
 
