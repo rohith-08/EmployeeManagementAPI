@@ -4,10 +4,10 @@ namespace EmployeeManagementAPI.Services
 {
     public interface IEmployeeService
     {
-        List<EmployeeDto> GetAll();
-        EmployeeDto? GetById(int id);
-        EmployeeDto Add(CreateEmployeeDto dto);
-        EmployeeDto? Update(int id,CreateEmployeeDto dto);
-        bool Delete(int id);
+        Task<List<EmployeeDto>> GetAll();
+       Task<EmployeeDto?> GetById(int id);
+       Task<EmployeeDto> Add(CreateEmployeeDto dto);
+        Task<EmployeeDto?> Update(int id,CreateEmployeeDto dto);
+        Task<bool> Delete(int id);
     }
 }
