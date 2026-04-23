@@ -54,11 +54,14 @@ namespace EmployeeManagementAPI.Services
         {
             var param = new SqlParameter("@Department", department);
 
-            return await _context.Employees
+            var employees = await _context.Employees
                 .FromSqlRaw("EXEC SP_GetEmployeesByDepartment @Department", param)
                 .AsNoTracking()
-                .Select(e => MapToDto(e))
-                .ToListAsync();
+                .ToListAsync();   // ✅ fetch first
+
+            // ✅ then map in memory
+            return employees.Select(e => MapToDto(e)).ToList();
+
         }
 
         // ✅ Add
