@@ -56,5 +56,17 @@ namespace EmployeeManagementAPI.Controllers
                 return NotFound(new { message = $"Employee {id} not found" });
             return NoContent();
         }
+
+        [HttpGet("by-department/{department}")]
+        public async Task<IActionResult> GetByDepartment(string department)
+        {
+            var employees = await _employeeService.GetByDepartment(department);
+
+            if(!employees.Any())
+                return NotFound(new {message = $"No employees found in {department} department "});
+
+            return Ok(employees);
+
+        }
     }
 }
