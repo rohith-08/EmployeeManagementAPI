@@ -4,6 +4,7 @@ namespace EmployeeManagementAPI.Services
 {
     public interface IEmployeeService
     {
+        Task<List<EmployeeDto>> GetByDepartment(string department);
         Task<List<EmployeeDto>> GetAll();
        Task<EmployeeDto?> GetById(int id);
        Task<EmployeeDto> Add(CreateEmployeeDto dto);
