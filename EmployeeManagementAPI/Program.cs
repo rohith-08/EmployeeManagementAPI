@@ -30,6 +30,8 @@ namespace EmployeeManagementAPI
                 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
                 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
                 builder.Services.AddOpenApi();
+                builder.Services.AddEndpointsApiExplorer();
+                builder.Services.AddSwaggerGen();
                 // test change
                 builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(
@@ -49,6 +51,8 @@ namespace EmployeeManagementAPI
                 {
                     app.MapOpenApi();
                     app.MapScalarApiReference();
+                    app.UseSwagger();
+                    app.UseSwaggerUI();
                 }
                 app.UseMiddleware<ExceptionMiddleware>();
                 app.UseMiddleware<RequestLoggingMiddleware>();
