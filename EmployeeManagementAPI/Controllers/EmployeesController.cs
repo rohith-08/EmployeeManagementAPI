@@ -1,11 +1,13 @@
 using EmployeeManagementAPI.DTOs;
 using EmployeeManagementAPI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EmployeeManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeService _service;
@@ -16,6 +18,7 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,HR,Viewer")]
         public async Task<IActionResult> GetAll()
         {
             var employees = await _service.GetAll();
@@ -23,6 +26,7 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles ="Admin,HR,Viewer")]
         public async Task<IActionResult> GetById(int id)
         {
             var employee = await _service.GetById(id);
@@ -33,6 +37,7 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> Add(CreateEmployeeDto dto)
         {
             if (!ModelState.IsValid)
@@ -43,6 +48,7 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin,HR")]
         public async Task<IActionResult> Update(int id, CreateEmployeeDto dto)
         {
             if (!ModelState.IsValid)
@@ -56,6 +62,8 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _service.Delete(id);
@@ -66,6 +74,8 @@ namespace EmployeeManagementAPI.Controllers
         }
 
         [HttpGet("by-department/{department}")]
+        [Authorize(Roles = "Admin,HR,Viewer")]
+
         public async Task<IActionResult> GetByDepartment(string department)
         {
             var result = await _service.GetByDepartment(department);
