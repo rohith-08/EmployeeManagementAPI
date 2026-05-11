@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
-
 namespace EmployeeManagementAPI
 {
     public class Program
