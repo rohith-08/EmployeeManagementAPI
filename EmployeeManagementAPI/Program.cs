@@ -15,9 +15,14 @@ namespace EmployeeManagementAPI
 
         {
             Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console()
-            .WriteTo.File("Logs/app-log-.txt", rollingInterval: RollingInterval.Day)
-            .CreateLogger();
+       //.ReadFrom.Configuration(builder.Configuration)
+       .WriteTo.Console(outputTemplate:
+           "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+       .WriteTo.File("Logs/app-log-.txt",
+           rollingInterval: RollingInterval.Day,
+           outputTemplate:
+           "[{Timestamp:yyyy-MM-dd HH:mm:ss} {Level:u3}] {Message:lj} {Properties:j}{NewLine}{Exception}")
+       .CreateLogger();
 
             try
             {
