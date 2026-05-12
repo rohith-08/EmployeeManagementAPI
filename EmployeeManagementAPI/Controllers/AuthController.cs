@@ -5,13 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-
+using Microsoft.Extensions.Logging;
 namespace EmployeeManagementAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly ILogger<AuthController> _logger;
         private readonly IConfiguration _configuration;
 
         private readonly List<(string Username, string Password, string Role)> _users = new()
@@ -21,9 +22,10 @@ namespace EmployeeManagementAPI.Controllers
             ("viewer", "view123", "Viewer")
 
         };
-        public AuthController(IConfiguration configuration)
+        public AuthController(IConfiguration configuration,ILogger<AuthController> logger)
         {
             _configuration = configuration;
+            _logger = logger;
         }
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginDto dto)
@@ -33,8 +35,15 @@ namespace EmployeeManagementAPI.Controllers
                 u.Password == dto.Password);
 
             if (user == default)
+            {
+                _logger.LogWarning("Failed login attempt for username: {Username}", dto.Username);
                 return Unauthorized(new { message = "Invalid username or password" });
+            }
 
+                _logger.LogInformation(
+               "Successful login — User: {Username} Role: {Role}",
+                  user.Username,
+                     user.Role);
             var token = GenerateToken(user.Username, user.Role);
             return Ok(new { token, role = user.Role });
         }
