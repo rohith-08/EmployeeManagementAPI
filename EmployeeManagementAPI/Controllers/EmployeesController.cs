@@ -16,14 +16,20 @@ namespace EmployeeManagementAPI.Controllers
         {
             _service = service;
         }
-
         [HttpGet]
         [Authorize(Roles = "Admin,HR,Viewer")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? search = null)
         {
-            var employees = await _service.GetAll();
-            return Ok(employees);
+            if (page < 1) page = 1;
+            if (pageSize < 1 || pageSize > 100) pageSize = 10;
+
+            var result = await _service.GetAll(page, pageSize, search);
+            return Ok(result);
         }
+
 
         [HttpGet("{id}")]
         [Authorize(Roles ="Admin,HR,Viewer")]

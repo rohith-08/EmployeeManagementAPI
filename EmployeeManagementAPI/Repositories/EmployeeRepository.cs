@@ -14,12 +14,29 @@ namespace EmployeeManagementAPI.Repositories
             _context = context;
         }
 
-        public async Task<List<Employee>> GetAll()
+        public async Task<(List<Employee> Employees, int TotalCount)> GetAll(
+            int page, int pageSize, string? search)
         {
-            return await _context.Employees
-                .FromSqlRaw("EXEC SP_GetAllEmployees")
-                .AsNoTracking()
+            var query = _context.Employees.AsNoTracking().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(e =>
+                    e.Name.Contains(search) ||
+                    e.Email.Contains(search) ||
+                    e.Department.Contains(search) ||
+                    e.Designation.Contains(search));
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var employees = await query
+                .OrderBy(e => e.Name)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
+
+            return (employees, totalCount);
         }
 
         public async Task<Employee?> GetById(int id)
