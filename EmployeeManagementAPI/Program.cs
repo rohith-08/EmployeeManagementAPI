@@ -1,12 +1,14 @@
 using EmployeeManagementAPI.Data;
-using EmployeeManagementAPI.Services;
 using EmployeeManagementAPI.Middleware;
+using EmployeeManagementAPI.Repositories;
+using EmployeeManagementAPI.Services;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using Serilog;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Serilog;
+
 namespace EmployeeManagementAPI
 {
     public class Program
@@ -35,6 +37,8 @@ namespace EmployeeManagementAPI
                 // Add services to the container.
                 builder.Services.AddControllers();
                 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+                builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); // ← this one missing?
+
                 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
                 builder.Services.AddOpenApi();
                 builder.Services.AddEndpointsApiExplorer();
